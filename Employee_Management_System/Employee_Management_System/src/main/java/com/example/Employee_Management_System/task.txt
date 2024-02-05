@@ -1,0 +1,42 @@
+
+APIs
+Employee
+
+Create PUT api to update the employee data through ID.
+Create GET api to get employees through ID
+Create Delete api to delete an Employee
+
+Department
+
+Create GET api to get department data along with all the employees(employee data) into it.
+Create delete API to delete department, we can not delete department if an employee is in the department show error that employee belongs to this department can’t delete
+
+
+Projects
+Create POST api to create a new Project
+Create GET api to get all the projects (along with team members data)
+Create PUT api for all a new member into the project through PUT api
+Create Get api to get all the details of project by id
+Create Delete api to delete a project only if the end date is gone
+Create a PUT api to update the status of the project Only status.
+Write an api to get the budget of the Project based on the employee salary
+Write an api to get the highest salary holders
+Write an api to get the second-highest salary holder group by department
+Write an api to get the total salary of employees under each department
+Write an api to get all the “NEW“ projects list
+Write an API to get all the “ON-GOING“ Project list
+Write an API to get all the “ENDed“ Project list
+Note -
+Add Exceptional Handling
+Utilise HTTP proper codes for each type of error/Exception
+There should be a single pattern for all api results
+                 { “data“: ““, “status_code“: 201/200/400
+                   “error” : “if any error“,
+                   ”message”: “status message, created successfully, updated <object>, etc“}
+Utilise Optional and Learn About Optional Class (Should be implemented)
+Use Java 8+ and Stream APIs whenever possible
+Add Swagger for API documentation
+Create a Postman Documentation for it
+Add Actuators
+Utilise Devtools
+Utilise Lombok

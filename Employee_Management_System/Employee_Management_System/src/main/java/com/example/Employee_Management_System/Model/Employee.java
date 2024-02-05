@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -14,20 +16,26 @@ import org.hibernate.validator.constraints.UniqueElements;
 @NoArgsConstructor
 @Table(name="employee")
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(unique = true)
     private long Id;
+
     @Column(nullable = false)
     private String name;
+
     @Column(nullable = false)
     private  double salary;
+
 
     private String designation;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="department",referencedColumnName = "id")
-    private Department dId;
+    @JoinColumn(name="department_id")
+    private Department did;
 
     private String address;
+
+    private List<Long> Projects;
 }

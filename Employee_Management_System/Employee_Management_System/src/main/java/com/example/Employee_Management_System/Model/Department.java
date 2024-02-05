@@ -1,10 +1,14 @@
 package com.example.Employee_Management_System.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,4 +24,8 @@ public class Department {
 
     @Column(nullable = false)
     private String name;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "did")
+    private List<Employee> empList=new ArrayList<Employee>();
 }
