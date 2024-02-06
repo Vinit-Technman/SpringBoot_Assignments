@@ -27,5 +27,5 @@ public class Department {
 
     @JsonIgnore
     @OneToMany(mappedBy = "did")
-    private List<Employee> empList=new ArrayList<Employee>();
+    private List<Employee> empList=new ArrayList<>();
 }

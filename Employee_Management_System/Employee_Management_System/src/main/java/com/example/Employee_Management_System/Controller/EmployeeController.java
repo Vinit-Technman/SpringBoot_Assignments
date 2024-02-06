@@ -10,6 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/employee")
@@ -54,5 +55,21 @@ public class EmployeeController {
     public ApiManager<Department> getDepartmentDetailsByEmpId(@PathVariable(value ="id")Long empId)
     {
     return emp.getDepartmentByEmpId(empId);
+    }
+
+    @PutMapping("/{empid}/project/{p_id}")
+    public ApiManager<Employee> assignProjectToEmployee(@PathVariable(value="empid") Long empId,@PathVariable(value="p_id") Long ProId )
+    {
+        return emp.assignProjectToEmployee(empId,ProId);
+    }
+
+    @GetMapping("/highest-salary")
+    public ApiManager<Employee>getHighestSalary(){
+        return emp.getHighestSalary();
+    }
+
+    @GetMapping("/second-highest-salary-holds-by-department")
+    public ApiManager<Map<String,Employee>>getSecondHighestSalaryHoldsByDepartment(){
+        return emp.getSecondHighestSalaryHolderGroupByDepartment();
     }
 }

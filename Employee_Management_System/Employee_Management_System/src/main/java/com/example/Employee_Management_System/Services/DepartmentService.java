@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -56,23 +58,46 @@ public class DepartmentService {
 
     public ApiManager<List<Employee>> getDepartmentWithEmployeeData(){
         List<Department> departments=rep.findAll();
-//        if(departments.isPresent())
-//        {
-
-//        List<Department> listOfDeptData=departments.stream().map().collect(Collectors.toList());
-//        ApiManager<Department> listOfDeptData;
-//        }
         List<Employee> data=departments.stream().flatMap(e->e.getEmpList().stream()).collect(Collectors.toList());
         return new ApiManager<List<Employee>> (data,HttpStatus.OK,"Data Received");
 //        return new ApiManager<>(HttpStatus.OK,"Data not found","Department Data not found ");
     }
 
-//    public ApiManager<Department> DeleteDepartmentById(Long id){
-//
-//        Optional<Department> dept=rep.findById(id);
-//        if(dept.isPresent()){
-//
-//        }
-//
-//    }
+    public ApiManager<Department> deleteDepartmentById(Long id) {
+        try {
+            Optional<Department> dept = rep.findById(id);
+            if (dept.isPresent()) {
+                List<Employee> employeeList = dept.get().getEmpList();
+                if (!employeeList.isEmpty()) {
+                    return new ApiManager<>(HttpStatus.BAD_REQUEST, "Error", "Employees are exist in department with id: " + id);
+                }
+                rep.deleteById(id);
+                return new ApiManager<>(HttpStatus.OK, "Success", "Department Deleted Successfully with dept id: " + id);
+            }
+            else{
+                return new ApiManager<>(HttpStatus.NOT_FOUND,"No Data Found","No Department exists with id: "+id);
+            }
+        }
+        catch (Exception e){
+            return new ApiManager<>(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),"Internal Server Error");
+        }
+    }
+
+    public ApiManager<Map<String,Double>> getTotalSalaryEachDepartment(){
+        try{
+            Map<String,Double> TotalSalary=new HashMap<>();
+            List<Department>departmentList=rep.findAll();
+            for(Department depart:departmentList){
+                String departmentName=depart.getName();
+                List<Employee>empList=depart.getEmpList();
+                double totalSalary=empList.stream().mapToDouble(Employee::getSalary).sum();
+                TotalSalary.put(departmentName,totalSalary);
+            }
+            return new ApiManager<>(TotalSalary,HttpStatus.OK,"Total salary by department retrieved successfully");
+        }
+        catch (Exception e)
+        {
+            return new ApiManager<>(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),"Internal Server Error");
+        }
+    }
 }

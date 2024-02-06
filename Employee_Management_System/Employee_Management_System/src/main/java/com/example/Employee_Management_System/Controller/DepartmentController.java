@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/department")
@@ -42,8 +43,13 @@ public class DepartmentController {
 
 //    Create delete API to delete department,we can not delete department if an employee
 //    is in the department show error that employee belongs to this department can’t delete
-//    @DeleteMapping("/deleteDepartment")
-//    public ApiManager<Department> DeleteDepartmentById(Long id){
-//
-//    }
+    @DeleteMapping("/deletedepartment/{id}")
+    public ApiManager<Department> DeleteDepartmentById(@PathVariable Long id){
+        return dep.deleteDepartmentById(id);
+    }
+
+    @GetMapping("/totalsalary")
+    public ApiManager<Map<String,Double>> getTotalSalaryByDepartment(){
+            return dep.getTotalSalaryEachDepartment();
+    }
 }

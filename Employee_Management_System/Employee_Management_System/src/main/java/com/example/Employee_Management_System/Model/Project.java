@@ -1,12 +1,14 @@
 package com.example.Employee_Management_System.Model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,24 +26,33 @@ public class Project {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="employee",referencedColumnName = "name")
-    private List<Employee> team;
+    @JsonIgnore
+    @ManyToMany(mappedBy ="projects")
+    private List<Employee> team=new ArrayList<>();
 
-    private String Team_lead;
+    @Enumerated(EnumType.STRING)
+    public Status status;
 
+    private LocalDate start_date;
 
-    public enum Status{
-        NEW,ON_GOING,ENDED
-    }
-    private Date start_date;
+    private LocalDate end_date;
 
-    private Date end_date;
-//    Status enum
-//    NEW - By default the Project status will be new till its start_date is after today.
-//    ON-GOING - If the today is between start and end date
-//    ENDED - if the today is after end-date
-//            Start_date
+//    @PrePersist
+//    @PreUpdate
+//    private void updateStatus(){
+//        LocalDate currentDate=LocalDate.now();
+//
+//        if(start_date!=null && end_date!=null){
+//            if(currentDate.isBefore(start_date)){
+//                status=Status.NEW;
+//            }
+//            else if(currentDate.isAfter(end_date)){
+//                status=Status.ENDED;
+//            }
+//            else{
+//                status=Status.ON_GOING;
+//            }
+//        }
+//    }
 
-//    End_date
 }

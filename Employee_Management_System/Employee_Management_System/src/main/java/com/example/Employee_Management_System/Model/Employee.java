@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -32,10 +33,15 @@ public class Employee {
     private String designation;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="department_id")
+    @JoinColumn(name="department_id",referencedColumnName = "id")
     private Department did;
 
     private String address;
 
-    private List<Long> Projects;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name="project_employee",
+            joinColumns = @JoinColumn(name="project_id"),
+    inverseJoinColumns = @JoinColumn(name="employee_id"))
+
+    private List<Project> projects=new ArrayList<>();
 }
