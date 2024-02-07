@@ -20,34 +20,34 @@ public class EmployeeController {
     EmployeeService emp;
     DepartmentService dept;
     @GetMapping("/allemployee")
-    public List<Employee> getEmployee() {
+    public ApiManager<List<Employee>> getEmployee() {
         return emp.getEmployees();
     }
 
     @PostMapping("/createemployee")
-    public Employee createEmployee(@Validated @RequestBody Employee e) {
+    public ApiManager<Employee> createEmployee(@Validated @RequestBody Employee e) {
         return emp.createEmployee(e);
     }
 
 
-    @PutMapping("/updateemployee/{id}/{did}")
-    public Employee updateEmployee(@PathVariable(value = "id") Long id, @PathVariable(value = "did") Long details) {
+    @PutMapping("/updateemployee/{id}")
+    public ApiManager<Employee> updateEmployee(@PathVariable(value = "id") Long id,@RequestBody Employee details) {
         return emp.updateEmployeeById(id, details);
     }
 
     @PutMapping("/assigndepartment/{id}/{did}")
-    public Employee assignDept(@PathVariable(value = "id")Long id,@PathVariable(value="did") Long did)
+    public ApiManager<Employee> assignDept(@PathVariable(value = "id")Long id,@PathVariable(value="did") Long did)
     {
         return emp.assignDepttoEmp(id,did);
     }
 
     @GetMapping("/getemployee/{id}")
-    public Employee getEmployeeById(@PathVariable(value="id")Long id){
+    public ApiManager<Employee> getEmployeeById(@PathVariable(value="id")Long id){
         return emp.getEmployeeById(id);
     }
 
     @DeleteMapping("/deleteemployee/{id}")
-    public String deleteEmployeeById(@PathVariable(value = "id")Long id){
+    public ApiManager<String> deleteEmployeeById(@PathVariable(value = "id")Long id){
         return emp.deleteEmployeeById(id);
     }
 

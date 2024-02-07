@@ -20,18 +20,18 @@ public class DepartmentController {
 
     //Create GET api to get all Department data (it will not have employee data in it)
     @GetMapping("/getdepartment")
-    public List<Department> getDepartment(){
+    public ApiManager<List<Department>> getDepartment(){
         return dep.getDepartments();
     }
 //    Create POST api to create a department
     @PostMapping("/createdepartment")
-    public Department createDepartment(@Validated @RequestBody Department d){
+    public ApiManager<Department> createDepartment(@Validated @RequestBody Department d){
         return dep.createDepartment(d);
     }
 
 //    Create PUT api to update the department data
     @PutMapping("/updatedepartment/{id}")
-    public Department updateDepartment(@PathVariable(value = "id") Long id, @RequestBody Department details){
+    public ApiManager<Department> updateDepartment(@PathVariable(value = "id") Long id, @RequestBody Department details){
         return dep.updateDepartment(id,details);
     }
 

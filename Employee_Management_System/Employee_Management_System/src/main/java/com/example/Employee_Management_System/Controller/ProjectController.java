@@ -21,12 +21,12 @@ public class ProjectController
     ProjectService pro;
 
     @PostMapping("/createproject")
-    public Project createProject(@Validated @RequestBody Project p){
+    public ApiManager<Project> createProject(@Validated @RequestBody Project p){
         return pro.createProject(p);
     }
 
     @GetMapping("/getproject/{id}")
-    public Project getProjectById(@PathVariable(value = "id")Long id){
+    public ApiManager<Project> getProjectById(@PathVariable(value = "id")Long id){
         return pro.getProjectById(id);
     }
 

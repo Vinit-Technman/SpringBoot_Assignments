@@ -29,22 +29,51 @@ public class DepartmentService {
     @Autowired
     DepartmentRepository rep;
 
-    public Department createDepartment(@Validated @RequestBody Department d)
+    public ApiManager<Department> createDepartment(@Validated @RequestBody Department d)
     {
-        return rep.save(d);
+        try{
+            Department department=rep.save(d);
+
+            return new ApiManager<>(department,HttpStatus.OK,"Department Created Successfully");
+        }
+        catch (Exception e)
+        {
+            return new ApiManager<>(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),"Internal Server Error");
+        }
     }
-    public List<Department> getDepartments(){
-        return rep.findAll();
+    public ApiManager<List<Department>> getDepartments(){
+        try{
+
+        return new ApiManager<>(rep.findAll(),HttpStatus.OK,"Department Data Retrieved");
+        }
+        catch (Exception e)
+        {
+            return new ApiManager<>(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),"Internal Server Error");
+        }
     }
 
-    public Department updateDepartment(@PathVariable(value = "did") Long DepartmentId, @RequestBody Department deptDetails){
-        Department d=rep.findById(DepartmentId).orElseThrow(()->new ResourceNotFoundException("No Department Exist With id:"+DepartmentId));
+    public ApiManager<Department> updateDepartment(@PathVariable(value = "did") Long DepartmentId, @RequestBody Department deptDetails){
+        try
+        {
+            Optional<Department> dept = rep.findById(DepartmentId);
+            if (dept.isPresent()) {
 
-        d.setName(deptDetails.getName());
+                Department d = dept.get();
 
-        Department updatedDept=rep.save(d);
+                d.setName(deptDetails.getName());
 
-        return updatedDept;
+                Department updatedDept = rep.save(d);
+
+                return new ApiManager<>(updatedDept,HttpStatus.OK,"Department Details Updated Successfully");
+            }
+            else {
+                return new ApiManager<>(HttpStatus.NOT_FOUND,"Data Not Found","No Department Exist With id:" + DepartmentId);
+            }
+        }
+        catch (Exception e)
+        {
+            return new ApiManager<>(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),"Internal Server Error");
+        }
     }
 
 //    public void addEmployeeInDepartment(Employee emp,Long did){
@@ -69,7 +98,7 @@ public class DepartmentService {
             if (dept.isPresent()) {
                 List<Employee> employeeList = dept.get().getEmpList();
                 if (!employeeList.isEmpty()) {
-                    return new ApiManager<>(HttpStatus.BAD_REQUEST, "Error", "Employees are exist in department with id: " + id);
+                    return new ApiManager<>(HttpStatus.BAD_REQUEST, "Error", "Employees are exist in department: " + dept.get().getName());
                 }
                 rep.deleteById(id);
                 return new ApiManager<>(HttpStatus.OK, "Success", "Department Deleted Successfully with dept id: " + id);

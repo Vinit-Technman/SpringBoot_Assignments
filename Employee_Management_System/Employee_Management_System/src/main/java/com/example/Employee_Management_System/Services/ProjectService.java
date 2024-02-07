@@ -29,12 +29,31 @@ public class ProjectService {
 
     @Autowired
     Repository empRep;
-    public Project createProject(@Validated @RequestBody Project p){
-        return rep.save(p);
+    public ApiManager<Project> createProject(Project p){
+        try{
+            Project project=rep.save(p);
+            return new ApiManager<>(project,HttpStatus.OK,"Project Created Successfully");
+        }
+        catch (Exception e)
+        {
+            return new ApiManager<>(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),"Internal Server Error");
+        }
     }
 
-    public Project getProjectById(@PathVariable(value = "id")Long id){
-        return rep.findById(id).orElseThrow(()->new ResourceNotFoundException("Project Not Exists with id: "+id));
+    public ApiManager<Project> getProjectById(Long id){
+        try{
+            Optional<Project>project=rep.findById(id);
+            if(project.isPresent())
+            {
+                return new ApiManager<>(project.get(),HttpStatus.OK,"Project Data Retrieved Successfully");
+            }
+            else
+        return new ApiManager<>(HttpStatus.NOT_FOUND,"Data Not Found","Project Not Exists with id: "+id);
+        }
+        catch (Exception e)
+        {
+            return new ApiManager<>(HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),"Internal Server Error");
+        }
     }
 
 //    public ApiManager<Project> assignProjectToTeam(Long id, List<Long> empIds){
