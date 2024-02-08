@@ -181,21 +181,21 @@ public class EmployeeService {
         }
     }
 
-    public ApiManager<Map<String,Employee>> getSecondHighestSalaryHolderGroupByDepartment(){
+    public ApiManager<Map<String,Object[]>> getSecondHighestSalaryHolderGroupByDepartment(){
         try{
-        Map<String,Employee> secondHighestEmployee=new HashMap<>();
+        Map<String,Object[]> secondHighestEmployee=new HashMap<>();
         List<Department> deptList=dep.findAll();
         for(Department dept:deptList){
             System.out.println(dept.getName());
             if(!dept.getEmpList().isEmpty())
             {
                 System.out.println("1");
-//                List<Employee> employeeList=rep.findByDepartmentOrderBySalaryDesc(dept);
-//            if(employeeList.size()>1)
-//            {
-//                secondHighestEmployee.put(dept.getName(),employeeList.get(1));
-//            }
-                            }
+                List<Object[]> employeeList=rep.findByDepartmentOrderBySalaryDesc(dept.getId());
+            if(employeeList.size()>1)
+            {
+                secondHighestEmployee.put(dept.getName(),employeeList.get(1)    );
+            }
+            }
         }
             return new ApiManager<>(secondHighestEmployee,HttpStatus.OK,"Second Highest Salary Holds By Department found");
 

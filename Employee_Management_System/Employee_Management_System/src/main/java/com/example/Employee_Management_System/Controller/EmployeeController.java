@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/employee")
@@ -69,7 +70,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/second-highest-salary-holds-by-department")
-    public ApiManager<Map<String,Employee>>getSecondHighestSalaryHoldsByDepartment(){
+    public ApiManager<Map<String, Object[]>>getSecondHighestSalaryHoldsByDepartment(){
         return emp.getSecondHighestSalaryHolderGroupByDepartment();
     }
 }
